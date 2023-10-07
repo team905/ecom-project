@@ -1,20 +1,23 @@
+const bcrypt = require('bcrypt');
 const User = require("../models/user.model")
-module.exports={
-   createUser:async(req,res)=>{
+  const createUser = async(req,res)=>{
       try{
+        const password = req.body.password
+        const hashedPassword = await bcrypt.hash(password, 10);
          const userData = new User({
             name:req.body.name,
             email:req.body.email,
             phone:req.body.phone,
-            avtar:req.body.avtar
+            avtar:req.body.avtar,
+            password:hashedPassword,
       })
       const user = await userData.save()
       res.send({massage:"Success",Data:user})
       }catch(err){
          res.send(err);
       }
-   },
-   getUser :async (req, res) => {
+   }
+   const getUser = async (req, res) => {
       try {
         const page = parseInt(req.query.page) || 1; 
         const take = parseInt(req.query.take) ||1;
@@ -33,9 +36,8 @@ module.exports={
       } catch (e) {
         res.send(e);
       }
-    },
-    
-  getOneUser:async(req,res)=>{
+    }
+const  getOneUser = async(req,res)=>{
       try{
               const _id = req.params.id
               const oneUser = await User.find({_id})
@@ -47,8 +49,8 @@ module.exports={
       }catch(e){
           res.send(e)
       }
-  },
-  deleteUser:async(req,res)=>{
+  }
+ const deleteUser = async(req,res)=>{
       try{
           const _id = req.params.id
           const deleteUser = await User.findByIdAndDelete({_id})
@@ -56,8 +58,8 @@ module.exports={
       }catch(e){
           res.send(e)
       }
-  },
-  updateUser:async(req,res)=>{
+  }
+  const updateUser = async(req,res)=>{
       try{
           const _id = req.params.id
           const updateUser = await User.findByIdAndUpdate(_id,req.body)
@@ -66,4 +68,11 @@ module.exports={
 
       }
   }
-}
+
+  module.exports = {
+    createUser,
+    updateUser,
+    deleteUser,
+    getOneUser,
+    getUser
+  };
