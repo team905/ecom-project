@@ -6,8 +6,8 @@ const authenticateJWT = require('../middleware/auth.middleware');
 // router.use('/', authenticateJWT);
 /* GET users listing. */
 router.post("/",userController.createUser)
-router.get("/",userController.getUser)
-router.get("/:id",userController.getOneUser)
+router.post("/all",userController.getUser)
+router.post("/:id",userController.getOneUser)
 router.delete("/:id",userController.deleteUser)
 router.patch("/:id",userController.updateUser)
 

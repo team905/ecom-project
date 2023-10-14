@@ -9,6 +9,7 @@ var usersRouter = require('./routes/users');
 var authRouter = require("./routes/auth")
 var categoryRouter = require("./routes/category");
 var productRouter = require("./routes/product")
+var fileRouter = require("./routes/file")
 
 var app = express();
 require("./database/connection")
@@ -27,6 +28,8 @@ app.use('/users', usersRouter);
 app.use('/auth', authRouter);
 app.use('/category', categoryRouter);
 app.use('/product', productRouter);
+app.use('/file', fileRouter);
+
 
 
 // catch 404 and forward to error handler

@@ -6,8 +6,8 @@ const authenticateJWT = require('../middleware/auth.middleware');
 // router.use('/', authenticateJWT);
 
 router.post('/', categoryController.createCategory);
-router.get('/', categoryController.getAllCategories);
-router.get('/:id', categoryController.getCategoryById);
+router.post('/all', categoryController.getAllCategories);
+router.post('/:id', categoryController.getCategoryById);
 router.put('/:id', categoryController.updateCategoryById);
 router.delete('/:id', categoryController.deleteCategoryById);
 
