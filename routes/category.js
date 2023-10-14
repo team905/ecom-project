@@ -3,7 +3,7 @@ const router = express.Router();
 const categoryController = require('../controllers/category.controller');
 
 const authenticateJWT = require('../middleware/auth.middleware');
-router.use('/', authenticateJWT);
+// router.use('/', authenticateJWT);
 
 router.post('/', categoryController.createCategory);
 router.get('/', categoryController.getAllCategories);

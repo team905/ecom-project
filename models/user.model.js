@@ -43,10 +43,4 @@ const userSchema = mongoose.Schema({
 const User = new mongoose.model("user", userSchema)
 
 User.ensureIndexes()
-  .then(() => {
-    console.log('Indexes are in sync');
-  })
-  .catch((err) => {
-    console.error('Error syncing indexes:', err);
-  });
 module.exports = User

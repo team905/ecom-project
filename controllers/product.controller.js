@@ -82,10 +82,50 @@ const deleteProductById = async (req, res) => {
   }
 };
 
+const getProductFilter = async (req, res) => {
+  try {
+    const { categoryId, type, sortBy, minPrice, maxPrice, sortOrder } = req.query;
+
+    const filter = {};
+    if (categoryId ){
+      filter.categoryId = (categoryId);
+    }
+    if (type) {
+      filter.type = type;
+    }
+    if (minPrice && maxPrice) {
+      filter.price = { $gte: parseInt(minPrice), $lte: parseInt(maxPrice) };
+    }
+
+    const sortCriteria = sortBy === 'date' ? { createdAt: sortOrder === 'asc' ? 1 : -1 } : { price: sortOrder === 'asc' ? 1 : -1 };
+
+    const products = await Product.find(filter).sort(sortCriteria);
+
+    const groupedProducts = groupProductsByType(products);
+
+    res.json(groupedProducts);
+  } catch (error) {
+    res.send(error);
+  }
+};
+
+ 
+ function groupProductsByType(products) {
+   const groupedProducts = {};
+   for (const product of products) {
+     if (!groupedProducts[product.type]) {
+       groupedProducts[product.type] = [];
+     }
+     groupedProducts[product.type].push(product);
+   }
+   return groupedProducts;
+ }
+
 module.exports = {
   createProduct,
   getAllProducts,
   getProductById,
   updateProductById,
   deleteProductById,
+  getProductFilter,
 };
