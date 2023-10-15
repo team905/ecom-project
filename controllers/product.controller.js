@@ -1,5 +1,7 @@
 const Product = require('../models/product.model');
 const Category = require('../models/category.model');
+const Wishlist = require("../models/wishlist.model")
+const Cart = require("../models/card.module")
 
 // Create a new product
 const createProduct = async (req, res) => {
@@ -84,11 +86,15 @@ const deleteProductById = async (req, res) => {
 
 const getProductFilter = async (req, res) => {
   try {
-    const { categoryId, type, sortBy, minPrice, maxPrice, sortOrder } = req.query;
+    const { categoryId, type, sortBy, minPrice, maxPrice, sortOrder, userId } = req.query;
 
+    const userWishlist = await Wishlist.find({ userId }, 'productId');
+    const wishlistProductIds = userWishlist.map((wishlistItem) => wishlistItem.productId);
+    const userCart = await Cart.find({ userId }, 'productId');
+    const cartProductIds = userCart.map((cartItem) => cartItem.productId);
     const filter = {};
-    if (categoryId ){
-      filter.categoryId = (categoryId);
+    if (categoryId) {
+      filter.categoryId = categoryId;
     }
     if (type) {
       filter.type = type;
@@ -101,25 +107,49 @@ const getProductFilter = async (req, res) => {
 
     const products = await Product.find(filter).sort(sortCriteria);
 
-    const groupedProducts = groupProductsByType(products);
+    const groupedProducts = groupProductsByType(products, wishlistProductIds, cartProductIds);
 
     res.json(groupedProducts);
   } catch (error) {
-    res.send(error);
+    res.send(error.message);
   }
 };
 
- 
- function groupProductsByType(products) {
-   const groupedProducts = {};
-   for (const product of products) {
-     if (!groupedProducts[product.type]) {
-       groupedProducts[product.type] = [];
-     }
-     groupedProducts[product.type].push(product);
-   }
-   return groupedProducts;
- }
+function groupProductsByType(products, wishlistProductIds, cartProductIds) {
+  const groupedProducts = {};
+
+  for (const product of products) {
+    if (!groupedProducts[product.type]) {
+      groupedProducts[product.type] = [];
+    }
+
+    const isWishlist = wishlistProductIds.some(
+      (wishlistProductId) => wishlistProductId.toString() === product._id.toString()
+    );
+
+    const isCart = cartProductIds.some(
+      (cartProductId) => cartProductId.toString() === product._id.toString()
+    );
+
+    const cleanProduct = {
+      _id: product._id,
+      name: product.name,
+      type: product.type,
+      price: product.price,
+      categoryId: product.categoryId,
+      __v: product.__v,
+      wishlist: isWishlist,
+      cart: isCart,
+    };
+
+    groupedProducts[product.type].push(cleanProduct);
+  }
+
+  return groupedProducts;
+}
+
+
+
 
 module.exports = {
   createProduct,

@@ -10,6 +10,8 @@ var authRouter = require("./routes/auth")
 var categoryRouter = require("./routes/category");
 var productRouter = require("./routes/product")
 var fileRouter = require("./routes/file")
+var wistlistRouter = require("./routes/wistlist")
+var cardRouter = require("./routes/card")
 
 var app = express();
 require("./database/connection")
@@ -29,6 +31,8 @@ app.use('/auth', authRouter);
 app.use('/category', categoryRouter);
 app.use('/product', productRouter);
 app.use('/file', fileRouter);
+app.use('/wistlist', wistlistRouter);
+app.use('/card', cardRouter);
 
 
 

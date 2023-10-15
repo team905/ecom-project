@@ -11,7 +11,7 @@ const categorySchema = new mongoose.Schema({
   },
   includedItems: [{
     type: mongoose.Schema.Types.ObjectId,
-    ref: 'Product' // Referencing the Product model
+    ref: 'Product'
   }]
 },
   {

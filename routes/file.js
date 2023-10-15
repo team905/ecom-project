@@ -50,7 +50,7 @@ router.post('/uploads', upload.single('file'), (req, res) => {
 router.get('/:fileName', async (req, res) => {
   try {
     const { fileName } = req.params;
-    const bucketName = 'userimagebucket-web'; // Replace with your S3 bucket name
+    const bucketName = 'userimagebucket-web';
 
     const params = {
       Bucket: bucketName,
