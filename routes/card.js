@@ -6,5 +6,7 @@ const authenticateJWT = require('../middleware/auth.middleware');
 // router.use('/', authenticateJWT);
 /* GET users listing. */
 router.post("/add",cardController.AddToCardList)
+router.post('/cardCount',cardController.cardCount )
+
 
 module.exports = router;

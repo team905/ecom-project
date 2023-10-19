@@ -22,5 +22,24 @@ const AddToWistList = async (req, res) => {
   }
 };
 
+const wistlistCount =  async (req, res) => {
+  try {
+    const { productId, categoryId } = req.body;
+
+    if (!productId || !categoryId) {
+      return res.status(400).json({ message: 'Missing required parameters' });
+    }
+
+    const count = await Wishlist.countDocuments({
+      productId,
+      categoryId,
+    });
+
+    res.json({ count });
+  } catch (error) {
+    res.status(500).json({ message: 'Internal server error', error: error.message });
+  }
+}
+
 module.exports =
-  { AddToWistList }
+  { AddToWistList,wistlistCount }
