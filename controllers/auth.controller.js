@@ -1,6 +1,8 @@
 const bcrypt = require('bcrypt');
 const jwt = require('jsonwebtoken');
 const User = require("../models/user.model");
+const { OAuth2Client } = require('google-auth-library');
+require('dotenv').config();
 const crypto = require('crypto');
 const { sendPasswordResetEmail } = require('../utils/email.service');
 const { token } = require('morgan');
@@ -84,5 +86,36 @@ const resetPassword = async (req, res) => {
     res.status(500).json({ message: 'Internal server error' });
   }
 }
+const googleLogin = async (req, res) => {
+  try {
+    const { tokenId } = req.body;
+    const client = new OAuth2Client(process.env.GOOGLE_CLIENT_ID);
+    const response = await client.verifyIdToken({ idToken: tokenId, audience: process.env.GOOGLE_CLIENT_ID });
+    const { email_verified, email, name, picture } = response.payload;
+
+    if (email_verified) {
+      const user = await User.findOne({ email });
+      if (user) {
+        const token = jwt.sign({ _id: user._id }, process.env.JWT_SECRET, { expiresIn: '7d' });
+        const { _id, email, name, role } = user;
+        return res.json({ token, user: { _id, email, name, role } });
+      } else {
+        let password = email + process.env.JWT_SECRET;
+        const newUser = new User({ name, email, password });
+        await newUser.save();
+        const token = jwt.sign({ _id: newUser._id }, process.env.JWT_SECRET, { expiresIn: '7d' });
+        const { _id, email, name, role } = newUser;
+        return res.json({ token, user: { _id, email, name, role } });
+      }
+    } else {
+      return res.status(400).json({ error: 'Google login failed. Try again.' });
+    }
+  } catch (err) {
+    console.error(err);
+    res.status(500).json({ message: 'Internal server error' });
+  }
+}
+
+
 
 module.exports = {login,logout,forgetPass,resetPassword}
