@@ -1,7 +1,9 @@
 const Product = require('../models/product.model');
 const Category = require('../models/category.model');
 const Wishlist = require("../models/wishlist.model")
+const ViewedProduct = require("../models/viewed-product.model")
 const Cart = require("../models/card.module")
+const jwt = require("jsonwebtoken")
 
 // Create a new product
 const createProduct = async (req, res) => {
@@ -46,14 +48,33 @@ const getProductById = async (req, res) => {
   const { id } = req.params;
   try {
     const product = await Product.findById(id);
+    
     if (!product) {
       return res.status(404).json({ message: 'Product not found' });
     }
+    product.ViewedCount += 1;
+    await product.save();
+    if (req.headers.authorization && req.headers.authorization.startsWith('Bearer ')) {
+      const token = req.headers.authorization.split(' ')[1];
+      const decoded = jwt.verify(token, 'accessKey');
+      const userId = decoded.userId;
+      const category = await Category.findById(product.categoryId)
+      const viewedProduct = new ViewedProduct({
+        userId,
+        productId: product._id,
+        productName: product.name,
+        categoryId: product.categoryId,
+        categoryName: category.name
+      });
+
+      await viewedProduct.save();
+    }
+
     res.status(200).json({ message: 'Product retrieved successfully', data: product });
   } catch (error) {
-    res.status(500).json({ message: 'Internal server error', error });
+    res.status(500).json({ message: 'Internal server error', error: error.message });
   }
-};
+}
 
 // Update a product by ID
 const updateProductById = async (req, res) => {

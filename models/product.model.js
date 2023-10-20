@@ -16,6 +16,10 @@ const productSchema = new mongoose.Schema({
   categoryId: {
     type: mongoose.Schema.Types.ObjectId,
     ref: 'Category' // Referencing the Category model
+  },
+  ViewedCount: {
+    type: Number,
+    default: 0 // Default value is 0
   }
 },
   {
