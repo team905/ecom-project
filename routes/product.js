@@ -12,5 +12,6 @@ router.post('/one/:id/', productController.getProductById);
 router.put('/:id', productController.updateProductById);
 router.delete('/:id', productController.deleteProductById);
 router.post('/products',productController.getProductFilter )
+router.post('/addImage',productController.AddImage )
 
 module.exports = router;

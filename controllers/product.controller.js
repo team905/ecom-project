@@ -169,6 +169,28 @@ function groupProductsByType(products, wishlistProductIds, cartProductIds) {
   return groupedProducts;
 }
 
+const AddImage = async (req, res) => {
+  try {
+    const { productId,imagePath } = req.body;
+    const product = await Product.findById(productId);
+
+    if (!product) {
+      return res.status(404).json({ message: 'Product not found' });
+    }
+    const newImage = {
+      url: imagePath, 
+      status: 'active', 
+    };
+
+    product.images.push(newImage);
+    await product.save();
+
+    res.status(201).json({ message: 'Product image added successfully', data: newImage });
+  } catch (error) {
+    res.status(500).json({ message: 'Internal server error', error: error.message });
+  }
+}
+
 
 
 
@@ -180,4 +202,5 @@ module.exports = {
   updateProductById,
   deleteProductById,
   getProductFilter,
+  AddImage,
 };

@@ -1,5 +1,15 @@
 const mongoose = require("mongoose");
-
+const imageSchema = new mongoose.Schema({
+  url: {
+    type: String,
+    required: true,
+  },
+  status: {
+    type: String,
+    enum: ['active', 'inactive'],
+    default: 'active',
+  },
+});
 const productSchema = new mongoose.Schema({
   name: {
     type: String,
@@ -15,11 +25,12 @@ const productSchema = new mongoose.Schema({
   },
   categoryId: {
     type: mongoose.Schema.Types.ObjectId,
-    ref: 'Category' // Referencing the Category model
+    ref: 'Category'
   },
+  images: [imageSchema],
   ViewedCount: {
     type: Number,
-    default: 0 // Default value is 0
+    default: 0
   }
 },
   {
