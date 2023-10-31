@@ -6,6 +6,7 @@ const { S3Client } = require('@aws-sdk/client-s3');
 const { GetObjectCommand } = require('@aws-sdk/client-s3');
 const shortId = require('shortid');
 const { Readable } = require('readable-stream');
+const authenticateJWT = require("../middleware/auth.middleware")
 
 const region = "us-east-1";
 const accessKeyId = "AKIAQ3GJR26LCSV2VLUJ";
@@ -38,7 +39,7 @@ const upload = multer({
   }),
 });
 
-router.post('/uploads', upload.single('file'), (req, res) => {
+router.post('/uploads',authenticateJWT ,upload.single('file'), (req, res) => {
   try {
     const fileName = req.uploadedFileName;
     res.json({ message: 'File uploaded successfully', fileName: fileName });
@@ -47,7 +48,7 @@ router.post('/uploads', upload.single('file'), (req, res) => {
   }
 });
 
-router.get('/:fileName', async (req, res) => {
+router.get('/:fileName',authenticateJWT, async (req, res) => {
   try {
     const { fileName } = req.params;
     const bucketName = 'userimagebucket-web';
