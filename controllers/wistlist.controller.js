@@ -22,7 +22,7 @@ const AddToWistList = async (req, res) => {
   }
 };
 
-const wistlistCount =  async (req, res) => {
+const wistlistCount = async (req, res) => {
   try {
     const { productId, categoryId } = req.body;
 
@@ -42,4 +42,4 @@ const wistlistCount =  async (req, res) => {
 }
 
 module.exports =
-  { AddToWistList,wistlistCount }
+  { AddToWistList, wistlistCount }

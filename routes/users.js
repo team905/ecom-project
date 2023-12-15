@@ -3,12 +3,12 @@ var router = express.Router();
 const userController = require("../controllers/user.controller")
 const authenticateJWT = require('../middleware/auth.middleware');
 
-router.use('/', authenticateJWT);
+// router.use('/', authenticateJWT);
 /* GET users listing. */
-router.post("/",userController.createUser)
-router.post("/all",userController.getUser)
-router.post("/:id",userController.getOneUser)
-router.delete("/:id",userController.deleteUser)
-router.patch("/:id",userController.updateUser)
+router.post("/",userController.createUser);
+router.post("/all",userController.getUser);
+router.post("/getOneUser",userController.getOneUser);
+router.post("/deleteUser",userController.deleteUser);
+router.post("/updateUser",userController.updateUser);
 
 module.exports = router;

@@ -54,7 +54,7 @@ const forgetPass = async (req, res) => {
     await user.save();
     // await sendPasswordResetEmail(email, resetToken);
     console.log(resetToken)
-    res.status(200).json({ message: 'Password reset token sent to your email' ,resetToken});
+    res.status(200).json({ message: 'Password reset token sent to your email', resetToken });
   } catch (err) {
     console.error(err);
     res.status(500).json({ message: 'Internal server error' });
@@ -118,4 +118,4 @@ const googleLogin = async (req, res) => {
 
 
 
-module.exports = {login,logout,forgetPass,resetPassword}
+module.exports = { login, logout, forgetPass, resetPassword }

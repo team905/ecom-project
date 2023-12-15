@@ -26,7 +26,7 @@ const userSchema = mongoose.Schema({
   },
   role: {
     type: String,
-    enum: ['USER', 'ADMIN'],
+    enum: ['USER', 'ADMIN','SHOP'],
     default: 'USER',
   },
   resetPasswordToken: {
@@ -42,5 +42,5 @@ const userSchema = mongoose.Schema({
 
 const User = new mongoose.model("user", userSchema)
 
-User.ensureIndexes()
+// User.ensureIndexes()
 module.exports = User
