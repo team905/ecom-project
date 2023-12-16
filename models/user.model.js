@@ -42,5 +42,5 @@ const userSchema = mongoose.Schema({
 
 const User = new mongoose.model("user", userSchema)
 
-// User.ensureIndexes()
+User.ensureIndexes()
 module.exports = User

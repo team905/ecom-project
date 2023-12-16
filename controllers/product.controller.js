@@ -28,7 +28,7 @@ const createProduct = async (req, res) => {
 
     res.status(201).json({ message: 'Product created successfully', data: product });
   } catch (error) {
-    res.status(500).json({ message: 'Internal server error', error });
+    res.status(500).json({ message: 'Internal server error',error});
   }
 };
 
@@ -47,7 +47,7 @@ const getAllProducts = async (req, res) => {
 
 // Get a single product by ID
 const getProductById = async (req, res) => {
-  const { id } = req.params;
+  const { id } = req.body;
   try {
     const product = await Product.findById(id);
 
@@ -80,7 +80,7 @@ const getProductById = async (req, res) => {
 
 // Update a product by ID
 const updateProductById = async (req, res) => {
-  const { id } = req.params;
+  const { id } = req.body;
   const updatedProductData = req.body;
   try {
     const product = await Product.findByIdAndUpdate(id, updatedProductData, { new: true });
@@ -95,7 +95,7 @@ const updateProductById = async (req, res) => {
 
 // Delete a product by ID
 const deleteProductById = async (req, res) => {
-  const { id } = req.params;
+  const { id } = req.body;
   try {
     const product = await Product.findByIdAndDelete(id);
     if (!product) {

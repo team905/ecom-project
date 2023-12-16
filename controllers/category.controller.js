@@ -24,9 +24,9 @@ const getAllCategories = async (req, res) => {
 
 // Get a single category by ID
 const getCategoryById = async (req, res) => {
-  const { id } = req.params;
+  const _id  = req.body.id;
   try {
-    const category = await Category.findById(id);
+    const category = await Category.findById({_id});
     if (!category) {
       return res.status(404).json({ message: 'Category not found' });
     }
@@ -38,10 +38,10 @@ const getCategoryById = async (req, res) => {
 
 // Update a category by ID
 const updateCategoryById = async (req, res) => {
-  const { id } = req.params;
+  const _id = req.body.id;
   const updatedCategoryData = req.body;
   try {
-    const category = await Category.findByIdAndUpdate(id, updatedCategoryData, { new: true });
+    const category = await Category.findByIdAndUpdate(_id, updatedCategoryData, { new: true });
     if (!category) {
       return res.status(404).json({ message: 'Category not found' });
     }
@@ -53,9 +53,9 @@ const updateCategoryById = async (req, res) => {
 
 // Delete a category by ID
 const deleteCategoryById = async (req, res) => {
-  const { id } = req.params;
+  const  _id  = req.body.id;
   try {
-    const category = await Category.findByIdAndDelete(id);
+    const category = await Category.findByIdAndDelete({_id});
     if (!category) {
       return res.status(404).json({ message: 'Category not found' });
     }

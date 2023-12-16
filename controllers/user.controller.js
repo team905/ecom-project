@@ -1,5 +1,6 @@
 const bcrypt = require('bcrypt');
-const User = require("../models/user.model")
+const User = require("../models/user.model");
+const { param } = require('../routes/product');
 const createUser = async (req, res) => {
   try {
     const password = req.body.password
@@ -67,8 +68,14 @@ const deleteUser = async (req, res) => {
 const updateUser = async (req, res) => {
   try {
     const _id = req.body.id
+    const userCheck = await User.find({ _id });
+    if (!userCheck) {
+
+      res.send( {message : "User Not Found"} )
+    }
     const updateUser = await User.findByIdAndUpdate(_id, req.body);
-    res.send({ message: "User Data Updated", Data: updateUser });
+    const userupdateData = await User.find({ _id });
+    res.send({ message: "User Data Updated", Data: userupdateData });
   } catch (e) {
     res.send(e);
   }
