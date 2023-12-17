@@ -25,5 +25,4 @@ jobs:
       - name: Deploy to Droplet
         run: |
           ssh root:sHubham@905p@142.93.218.218 "cd ecom-project && git pull origin main && npm install && pm2 restart www"
-        env:
-          SSH_PRIVATE_KEY: ssh-rsa AAAAB3NzaC1yc2EAAAADAQABAAACAQDiyOyrBeKNy2MAb6cvDHGES6rfXHxYXuEPgsvO98kTtMQ9j0oSFjkxISYvb3qdKQleY7xHLjmCtE6L56JQZWDDFDO1X+UsyIpmvGPgy+zfSkP9O366uHf1PWKUt5wL9jZ19KK+mJGoY41tD9pX9Evg11zAwrF68aEbrqH41Am3NSQV2nwThh0w9UYEHLHyCfaHAdQ3cVXtlXN2kxi+8BmkRQ70dOfsj7BPUkPnNChDq2Oq2ZCLEZGa9JWIV/oWMyI/WekmwhrpkgAp8Ia4B2UMY5SqREEGV8aEEN9kw3R7gVIo8j2rqKoeNE6RrpsAaDcMnpH+nc1VYOhkJKrnN3UyDUSGI1mbNhLChJt4b3nt0Iun56TSh53jDIYpIMRlTo4D0uuBXENqtLG1+MGRewlvYim3/tZow7Am3GJMQ7XRf7y9Dk5/WrXaxUCcsEIu9SkpKiFCorhkdsI2NDs0dPXLqS7AooAYeDHC63wajoPDYWUrd/VdU+acxYGB+ba/KyF9QOV950EmoVzuOzRfgkCxQGmay32uZYZKX2qpyk2qe9PO0zJiXltDSAzNI/g2zBZjqjmDwjFmxhpR+xo/acxmHU5rRn6ZvrIPlYQV5tILvBBCQUzZwWXsfG0K39U9qDQ2pXiryOoiKa6/BxVypLI+cvTaaDSE4Wy4p2B7vmCHfw== techteam905@gmail.com
+        
