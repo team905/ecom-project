@@ -1,13 +1,29 @@
 const mongoose = require("mongoose");
 
 const categorySchema = new mongoose.Schema({
-  name: {
+  _id: {
     type: String,
     required: true
+  },
+  name: {
+    type: String,
+    required: true,
+    unique: true
   },
   type: {
     type: String,
     required: true
+  },
+  image: {
+    type: String,
+  },
+  description: {
+    type: String,
+  },
+  noOfProducts: {
+    type: Number,
+    required: true,
+    default: 0
   },
   includedItems: [{
     type: mongoose.Schema.Types.ObjectId,

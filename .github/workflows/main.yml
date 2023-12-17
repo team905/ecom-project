@@ -25,5 +25,5 @@ jobs:
       - name: Deploy to Droplet
         run: |
           ssh root@142.93.218.218 "cd ecom-project && git pull origin main && npm install && pm2 restart www"
-        env:
-          SSH_PRIVATE_KEY: ${{ secrets.SSH_PRIVATE_KEY }}
+        # env:
+          # SSH_PRIVATE_KEY: ${{ secrets.SSH_PRIVATE_KEY }}

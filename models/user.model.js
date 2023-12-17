@@ -1,6 +1,10 @@
 const mongoose = require("mongoose");
 
 const userSchema = mongoose.Schema({
+  _id: {
+    type: String,
+    required: true
+  },
   name: {
     type: String,
     required: true
@@ -21,13 +25,16 @@ const userSchema = mongoose.Schema({
   avtar: {
     type: String
   },
+  categoryAccess: {
+    type: [String]
+  },
   deletedAt: {
     type: Date
   },
   role: {
     type: String,
-    enum: ['USER', 'ADMIN','SHOP'],
-    default: 'USER',
+    required: true,
+    enum: ['USER', 'ADMIN','SHOP']
   },
   resetPasswordToken: {
     type: String,
