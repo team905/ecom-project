@@ -80,10 +80,10 @@ const getProductById = async (req, res) => {
 
 // Update a product by ID
 const updateProductById = async (req, res) => {
-  const { id } = req.body;
+  const  _id  = req.body.id;
   const updatedProductData = req.body;
   try {
-    const product = await Product.findByIdAndUpdate(id, updatedProductData, { new: true });
+    const product = await Product.findByIdAndUpdate(_id, updatedProductData, { new: true });
     if (!product) {
       return res.status(404).json({ message: 'Product not found' });
     }
@@ -95,9 +95,9 @@ const updateProductById = async (req, res) => {
 
 // Delete a product by ID
 const deleteProductById = async (req, res) => {
-  const { id } = req.body;
+  const  _id  = req.body.id;
   try {
-    const product = await Product.findByIdAndDelete(id);
+    const product = await Product.findByIdAndDelete({_id});
     if (!product) {
       return res.status(404).json({ message: 'Product not found' });
     }
