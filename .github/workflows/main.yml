@@ -3,7 +3,7 @@ name: Ecom CI/CD backend
 on:
   push:
     branches:
-      - main
+      - master
 
 jobs:
   deploy:
