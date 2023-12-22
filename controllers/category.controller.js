@@ -63,7 +63,7 @@ const updateCategoryById = async (req, res) => {
   const updatedCategoryData = req.body;
   try {
     const category = await Category.updateOne({ _id }, updatedCategoryData);
-    if (!category) {
+    if (category.modifiedCount == 0) {
       return res.status(404).json({ message: 'Category not found' });
     }
     const categoryUpdatedData = await Category.findOne({ _id });
@@ -79,7 +79,7 @@ const deleteCategoryById = async (req, res) => {
   const  _id  = req.body.id;
   try {
     const category = await Category.deleteOne({_id});
-    if (!category) {
+    if (category.deletedCount == 0) {
       return res.status(404).json({ message: 'Category not found' });
     }
     res.status(200).json({ message: 'Category deleted successfully' });

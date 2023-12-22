@@ -10,5 +10,6 @@ router.post("/all",userController.getUsers);
 router.post("/getOneUser",userController.getOneUser);
 router.post("/deleteUser",userController.deleteUser);
 router.post("/updateUser",userController.updateUser);
+router.post("/getNearbyShopsByCategory",userController.getNearbyShopsByCategory);
 
 module.exports = router;

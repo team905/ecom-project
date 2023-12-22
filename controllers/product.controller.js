@@ -1,5 +1,6 @@
 const Product = require('../models/product.model');
 const Category = require('../models/category.model');
+const { v4: uuid } = require("uuid");
 const Wishlist = require("../models/wishlist.model")
 const ViewedProduct = require("../models/viewed-product.model")
 const Cart = require("../models/cart.module")
@@ -11,16 +12,19 @@ const createProduct = async (req, res) => {
     const productData = req.body;
     const categoryId = productData.categoryId;
 
-    const category = await Category.findById(categoryId);
+    const category = await Category.findOne({ _id : categoryId });
 
     if (!category) {
       return res.status(404).json({ message: 'Category not found' });
     }
+    let newUuid = uuid();
     const product = new Product({
+      _id: newUuid,
       name: productData.name,
       type: productData.type,
       price: productData.price,
-      categoryId: category._id
+      categoryId: category._id,
+      userId: req.body.userId
     });
     await product.save();
     category.includedItems.push(product._id);
@@ -33,15 +37,27 @@ const createProduct = async (req, res) => {
 };
 
 
-// Get all products
-const getAllProducts = async (req, res) => {
+// Get all products by categoryId
+const getAllProductsByCategory = async (req, res) => {
   try {
-    // TODO
-    // pass caterogy id 
-    const products = await Product.find();
-    res.status(200).json({ message: 'Products retrieved successfully', data: products });
-  } catch (error) {
-    res.status(500).json({ message: 'Internal server error', error });
+    var categoryId = req.body.categoryId;
+    const page = parseInt(req.body.page) || 1;
+    const limit = parseInt(req.body.limit) || 10;
+    const skip = (page - 1) * limit;
+    const totalProducts = await Product.countDocuments({categoryId});
+    const productData = await Product.find({categoryId})
+      .skip(skip)
+      .limit(limit);
+
+    res.send({
+      message: "Success",
+      total: totalProducts,
+      data: productData,
+      currentPage: page,
+      totalPages: Math.ceil(totalProducts / limit),
+    });
+  } catch (e) {
+    res.send(e);
   }
 };
 
@@ -56,21 +72,21 @@ const getProductById = async (req, res) => {
     }
     product.ViewedCount += 1;
     await product.save();
-    if (req.headers.authorization && req.headers.authorization.startsWith('Bearer ')) {
-      const token = req.headers.authorization.split(' ')[1];
-      const decoded = jwt.verify(token, 'accessKey');
-      const userId = decoded.userId;
-      const category = await Category.findById(product.categoryId)
-      const viewedProduct = new ViewedProduct({
-        userId,
-        productId: product._id,
-        productName: product.name,
-        categoryId: product.categoryId,
-        categoryName: category.name
-      });
+    // if (req.headers.authorization && req.headers.authorization.startsWith('Bearer ')) {
+    //   const token = req.headers.authorization.split(' ')[1];
+    //   const decoded = jwt.verify(token, 'accessKey');
+    //   const userId = decoded.userId;
+    //   const category = await Category.findById(product.categoryId)
+    //   const viewedProduct = new ViewedProduct({
+    //     userId,
+    //     productId: product._id,
+    //     productName: product.name,
+    //     categoryId: product.categoryId,
+    //     categoryName: category.name
+    //   });
 
-      await viewedProduct.save();
-    }
+    //   await viewedProduct.save();
+    // }
 
     res.status(200).json({ message: 'Product retrieved successfully', data: product });
   } catch (error) {
@@ -83,10 +99,11 @@ const updateProductById = async (req, res) => {
   const  _id  = req.body.id;
   const updatedProductData = req.body;
   try {
-    const product = await Product.findByIdAndUpdate(_id, updatedProductData, { new: true });
-    if (!product) {
+    const product = await Product.updateOne({_id}, updatedProductData);
+    if (product.modifiedCount == 0) {
       return res.status(404).json({ message: 'Product not found' });
     }
+    const productUpdatedData = await Product.findOne({ _id });
     res.status(200).json({ message: 'Product updated successfully', data: product });
   } catch (error) {
     res.status(500).json({ message: 'Internal server error', error });
@@ -97,8 +114,9 @@ const updateProductById = async (req, res) => {
 const deleteProductById = async (req, res) => {
   const  _id  = req.body.id;
   try {
-    const product = await Product.findByIdAndDelete({_id});
-    if (!product) {
+    const product = await Product.deleteOne({_id});
+    console.log('product....',product);
+    if (product.deletedCount == 0) {
       return res.status(404).json({ message: 'Product not found' });
     }
     res.status(200).json({ message: 'Product deleted successfully' });
@@ -193,13 +211,9 @@ const AddImage = async (req, res) => {
   }
 }
 
-
-
-
-
 module.exports = {
   createProduct,
-  getAllProducts,
+  getAllProductsByCategory,
   getProductById,
   updateProductById,
   deleteProductById,

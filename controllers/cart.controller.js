@@ -15,7 +15,7 @@ const AddTocartList = async (req, res) => {
 
       const createdcart = await newcart.save();
 
-      res.status(201).json({ message: 'cart created', createdcart: createdcart });
+      res.status(201).json({ message: 'Added to cart', createdcart: createdcart });
    } catch (err) {
       console.error(err);
       res.status(500).json({ message: 'Internal server error' });

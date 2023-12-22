@@ -26,7 +26,7 @@ const categorySchema = new mongoose.Schema({
     default: 0
   },
   includedItems: [{
-    type: mongoose.Schema.Types.ObjectId,
+    type: String,
     ref: 'Product'
   }]
 },

@@ -25,6 +25,12 @@ const userSchema = mongoose.Schema({
   avtar: {
     type: String
   },
+  latitude: {
+    type: String
+  },
+  longitude: {
+    type: String
+  },
   categoryAccess: {
     type: [String]
   },

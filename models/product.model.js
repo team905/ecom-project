@@ -11,6 +11,10 @@ const imageSchema = new mongoose.Schema({
   },
 });
 const productSchema = new mongoose.Schema({
+  _id: {
+    type: String,
+    required: true
+  },
   name: {
     type: String,
     required: true
@@ -19,12 +23,16 @@ const productSchema = new mongoose.Schema({
     type: String,
     required: true
   },
+  userId: {
+    type: String,
+    required: true
+  },
   price: {
     type: Number,
     required: true
   },
   categoryId: {
-    type: mongoose.Schema.Types.ObjectId,
+    type: String,
     ref: 'Category'
   },
   images: [imageSchema],
