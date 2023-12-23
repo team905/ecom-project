@@ -113,8 +113,8 @@ const getNearbyShopsByCategory = async (req, res) => {
       } else {
         sortedShops[i].distance = {};
       }
+      sortedShops[i].searchedCategory = categoryId;
     }
-
     // Send the sorted and processed list
     if (sortedShops.length > 0) {
       res.send(sortedShops);
