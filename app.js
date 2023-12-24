@@ -12,8 +12,11 @@ var productRouter = require("./routes/product")
 var fileRouter = require("./routes/file")
 var wistlistRouter = require("./routes/wistlist")
 var cartRouter = require("./routes/cart")
+var cors = require('cors');
 
 var app = express();
+
+app.use(cors())
 require("./database/connection")
 // view engine setup
 app.set('views', path.join(__dirname, 'views'));
