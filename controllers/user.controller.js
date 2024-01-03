@@ -40,8 +40,17 @@ const getUsers = async (req, res) => {
     const page = parseInt(req.body.page) || 1;
     const limit = parseInt(req.body.limit) || 10;
     const skip = (page - 1) * limit;
-    const totalUsers = await User.countDocuments();
-    const userData = await User.find()
+    const searchQuery = req.body.search || '';
+    
+    const searchCondition = {
+      $or: [
+        { name: new RegExp(searchQuery, 'i') }, // case-insensitive regex search
+        { email: new RegExp(searchQuery, 'i') }
+      ]
+    };
+    const totalUsers = await User.countDocuments(searchCondition);
+
+    const userData = await User.find(searchCondition)
       .sort({ createdAt: -1 })
       .skip(skip)
       .limit(limit)
@@ -62,7 +71,6 @@ const getUsers = async (req, res) => {
     res.send(e);
   }
 };
-
 
 const getOneUser = async (req, res) => {
   try {
