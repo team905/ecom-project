@@ -10,7 +10,7 @@ var authRouter = require("./routes/auth")
 var categoryRouter = require("./routes/category");
 var productRouter = require("./routes/product")
 var fileRouter = require("./routes/file")
-
+//test
 var app = express();
 require("./database/connection")
 // view engine setup
