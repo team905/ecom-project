@@ -30,6 +30,7 @@ const createUser = async (req, res) => {
     const user = await userData.save()
     res.send({ message: "User created", Data: user.email })
   } catch (err) {
+    console.log(err);
     res.send(err);
   }
 }
@@ -41,8 +42,14 @@ const getUsers = async (req, res) => {
     const skip = (page - 1) * limit;
     const totalUsers = await User.countDocuments();
     const userData = await User.find()
+      .sort({ createdAt: -1 })
       .skip(skip)
-      .limit(limit);
+      .limit(limit)
+      .populate({ 
+        path: 'categoryAccess', 
+        model: 'Category', // Replace 'Category' with the name of your category model
+        select: '_id name' // Select only the id and name of the category
+      });
 
     res.send({
       message: "Success",
@@ -54,7 +61,8 @@ const getUsers = async (req, res) => {
   } catch (e) {
     res.send(e);
   }
-}
+};
+
 
 const getOneUser = async (req, res) => {
   try {
