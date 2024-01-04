@@ -40,12 +40,23 @@ const createProduct = async (req, res) => {
 // Get all products by categoryId
 const getAllProductsByCategory = async (req, res) => {
   try {
-    var categoryId = req.body.categoryId;
+    const categoryId = req.body.categoryId;
+    const searchQuery = req.body.search || '';
     const page = parseInt(req.body.page) || 1;
     const limit = parseInt(req.body.limit) || 10;
     const skip = (page - 1) * limit;
-    const totalProducts = await Product.countDocuments({categoryId});
-    const productData = await Product.find({categoryId})
+
+    // Initialize search condition with categoryId
+    const searchCondition = { categoryId };
+
+    // Add name filter to search condition if search query is provided
+    if (searchQuery.trim() !== '') {
+      searchCondition.name = new RegExp(searchQuery, 'i'); // Case-insensitive regex search for name
+    }
+
+    const totalProducts = await Product.countDocuments(searchCondition);
+    const productData = await Product.find(searchCondition)
+      .sort({ createdAt: -1 })
       .skip(skip)
       .limit(limit);
 
@@ -60,6 +71,7 @@ const getAllProductsByCategory = async (req, res) => {
     res.send(e);
   }
 };
+
 
 // Get a single product by ID
 const getProductById = async (req, res) => {
