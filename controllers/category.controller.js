@@ -26,8 +26,13 @@ const getAllCategories = async (req, res) => {
     const page = parseInt(req.body.page) || 1;
     const limit = parseInt(req.body.limit) || 10;
     const skip = (page - 1) * limit;
-    const totalCategory = await Category.countDocuments();
-    const categoryData = await Category.find()
+    const searchQuery = req.body.search || '';
+    
+    const searchCondition = { name: new RegExp(searchQuery, 'i') };
+    
+    const totalCategory = await Category.countDocuments(searchCondition);
+    const categoryData = await Category.find(searchCondition)
+    .sort({ createdAt: -1 })
       .skip(skip)
       .limit(limit);
 
