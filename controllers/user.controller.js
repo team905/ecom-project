@@ -63,11 +63,13 @@ const getUsers = async (req, res) => {
     const Sr_No = (page - 1) * limit + 1;
 
     // Add a serial number to each user data
-    userData = userData.map((user, index) => ({
-      sr_no: Sr_No + index,
-      ...user.toObject()
-    }));
-
+    userData = userData.map((user, index) => {
+      var userObject = user.toObject();
+      userObject.sr_no = Sr_No + index;
+      userObject.password = "";
+      return userObject;
+    });
+    
     res.send({
       message: "Success",
       total: totalUsers,
