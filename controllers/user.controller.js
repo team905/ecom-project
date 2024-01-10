@@ -50,7 +50,7 @@ const getUsers = async (req, res) => {
     };
     const totalUsers = await User.countDocuments(searchCondition);
 
-    const userData = await User.find(searchCondition)
+    var userData = await User.find(searchCondition)
       .sort({ createdAt: -1 })
       .skip(skip)
       .limit(limit)
@@ -59,6 +59,14 @@ const getUsers = async (req, res) => {
         model: 'Category', // Replace 'Category' with the name of your category model
         select: '_id name' // Select only the id and name of the category
       });
+
+    const Sr_No = (page - 1) * limit + 1;
+
+    // Add a serial number to each user data
+    userData = userData.map((user, index) => ({
+      sr_no: Sr_No + index,
+      ...user.toObject()
+    }));
 
     res.send({
       message: "Success",

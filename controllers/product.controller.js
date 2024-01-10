@@ -55,10 +55,18 @@ const getAllProductsByCategory = async (req, res) => {
     }
 
     const totalProducts = await Product.countDocuments(searchCondition);
-    const productData = await Product.find(searchCondition)
+    var productData = await Product.find(searchCondition)
       .sort({ createdAt: -1 })
       .skip(skip)
       .limit(limit);
+
+      const Sr_No = (page - 1) * limit + 1;
+
+      // Add a serial number to each product data
+      productData = productData.map((product, index) => ({
+        sr_no: Sr_No + index,
+        ...product.toObject()
+      })); 
 
     res.send({
       message: "Success",

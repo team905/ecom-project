@@ -27,14 +27,22 @@ const getAllCategories = async (req, res) => {
     const limit = parseInt(req.body.limit) || 10;
     const skip = (page - 1) * limit;
     const searchQuery = req.body.search || '';
-    
+
     const searchCondition = { name: new RegExp(searchQuery, 'i') };
-    
+
     const totalCategory = await Category.countDocuments(searchCondition);
-    const categoryData = await Category.find(searchCondition)
-    .sort({ createdAt: -1 })
+    var categoryData = await Category.find(searchCondition)
+      .sort({ createdAt: -1 })
       .skip(skip)
       .limit(limit);
+
+      const Sr_No = (page - 1) * limit + 1;
+
+      // Add a serial number to each category data
+      categoryData = categoryData.map((category, index) => ({
+        sr_no: Sr_No + index,
+        ...category.toObject()
+      }));  
 
     res.send({
       message: "Success",
