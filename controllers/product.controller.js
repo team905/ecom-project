@@ -41,6 +41,7 @@ const createProduct = async (req, res) => {
 const getAllProductsByCategory = async (req, res) => {
   try {
     const categoryId = req.body.categoryId;
+    const userId = req.body.userId;
     const searchQuery = req.body.search || '';
     const page = parseInt(req.body.page) || 1;
     const limit = parseInt(req.body.limit) || 10;
@@ -48,7 +49,9 @@ const getAllProductsByCategory = async (req, res) => {
 
     // Initialize search condition with categoryId
     const searchCondition = { categoryId };
-
+    if(userId && userId !== ""){
+      searchCondition.userId = userId;
+    }
     // Add name filter to search condition if search query is provided
     if (searchQuery.trim() !== '') {
       searchCondition.name = new RegExp(searchQuery, 'i'); // Case-insensitive regex search for name
